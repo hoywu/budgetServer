@@ -7,9 +7,9 @@ type CategoryDTO struct {
 }
 
 type CategoryCreateResp struct {
-	Category *CategoryDTO `json:"category"`
+	Category *CategoryDTO
 }
 
 type CategoryListResp struct {
-	Categories *[]CategoryDTO `json:"categories"`
+	Categories *[]CategoryDTO
 }

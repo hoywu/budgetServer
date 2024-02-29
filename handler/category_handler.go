@@ -33,11 +33,11 @@ func NewCategory(c *gin.Context) {
 		return
 	}
 
-	categoryDto := response.CategoryDTO{}
-	copier.Copy(&categoryDto, category)
+	categoryDto := &response.CategoryDTO{}
+	copier.Copy(categoryDto, category)
 
 	c.JSON(http.StatusOK, dto.SuccessResp(
-		response.CategoryCreateResp{Category: &categoryDto},
+		response.CategoryCreateResp{Category: categoryDto},
 	))
 }
 

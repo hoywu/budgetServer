@@ -10,24 +10,40 @@ import (
 )
 
 func main() {
-	// load config
+	appConfig := loadAppConfig()
+	initDBConn(appConfig)
+	dbAutoMigrate()
+	startServer(":8080")
+}
+
+func loadAppConfig() config.AppConfig {
 	err, appConfig := config.LoadConfig()
 	if err != nil {
-		log.FATAL(err.Error())
+		log.FATAL("Load app config error: " + err.Error())
 	}
+	return appConfig
+}
 
-	// init db connection
-	err = db.InitDB(appConfig.Database)
+func initDBConn(appConfig config.AppConfig) {
+	err := db.InitDB(appConfig.Database)
 	if err != nil {
-		log.FATAL(err.Error())
+		log.FATAL("Init database connection error: " + err.Error())
 	}
+}
 
-	// create tables
-	db.DB.AutoMigrate(&model.User{}, &model.Token{}, &model.Category{}, &model.Record{})
+func dbAutoMigrate() {
+	db.DB.AutoMigrate(
+		&model.User{},
+		&model.Token{},
+		&model.Category{},
+		&model.Record{},
+		&model.Budget{},
+	)
+}
 
-	// start server
-	log.INFO("Server started at :8080")
+func startServer(addr string) {
+	log.INFO("Server started at " + addr)
 	gin.SetMode(gin.ReleaseMode)
 	r := router.InitRouter()
-	r.Run(":8080")
+	r.Run(addr)
 }
