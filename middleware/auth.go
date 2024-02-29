@@ -19,5 +19,6 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 		c.Set("uid", uid)
 		c.Next()
+		service.RefreshToken(token)
 	}
 }
