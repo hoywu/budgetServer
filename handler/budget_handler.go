@@ -7,6 +7,7 @@ import (
 	"github.com/hoywu/budgetServer/dto"
 	"github.com/hoywu/budgetServer/dto/request"
 	"github.com/hoywu/budgetServer/dto/response"
+	"github.com/hoywu/budgetServer/log"
 	"github.com/hoywu/budgetServer/service"
 	"github.com/jinzhu/copier"
 )
@@ -19,7 +20,8 @@ func NewBudget(c *gin.Context) {
 
 	budget, err := service.NewBudget(c.GetUint("uid"), &req)
 	if err != nil {
-		c.JSON(http.StatusOK, dto.ErrorResp(1, "Create budget failed"))
+		c.JSON(http.StatusOK, dto.ErrorResp(500, "Create budget failed"))
+		log.ERROR("Create budget failed: [UID %v] %v", c.GetUint("uid"), err)
 		return
 	}
 
@@ -39,7 +41,8 @@ func UpdateBudget(c *gin.Context) {
 
 	err := service.UpdateBudget(c.GetUint("uid"), &req)
 	if err != nil {
-		c.JSON(http.StatusOK, dto.ErrorResp(1, "Update budget failed"))
+		c.JSON(http.StatusOK, dto.ErrorResp(500, "Update budget failed"))
+		log.ERROR("Update budget failed: [UID %v] [BID %v] %v", c.GetUint("uid"), req.ID, err)
 		return
 	}
 
@@ -54,7 +57,8 @@ func RemoveBudget(c *gin.Context) {
 
 	err := service.RemoveBudget(req.ID)
 	if err != nil {
-		c.JSON(http.StatusOK, dto.ErrorResp(1, "Remove budget failed"))
+		c.JSON(http.StatusOK, dto.ErrorResp(500, "Remove budget failed"))
+		log.ERROR("Remove budget failed: [UID %v] [BID %v] %v", c.GetUint("uid"), req.ID, err)
 		return
 	}
 
@@ -64,7 +68,8 @@ func RemoveBudget(c *gin.Context) {
 func GetBudgetList(c *gin.Context) {
 	budgets, err := service.GetBudgetList(c.GetUint("uid"))
 	if err != nil {
-		c.JSON(http.StatusOK, dto.ErrorResp(1, "Get budget list failed"))
+		c.JSON(http.StatusOK, dto.ErrorResp(500, "Get budget list failed"))
+		log.ERROR("Get budget list failed: [UID %v] %v", c.GetUint("uid"), err)
 		return
 	}
 

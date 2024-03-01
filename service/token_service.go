@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/hoywu/budgetServer/dao"
@@ -11,7 +10,7 @@ import (
 )
 
 func IssueToken(uid uint, userAgent string) (token string, err error) {
-	log.INFO(fmt.Sprintf("IssueToken: uid=%d, userAgent=%s", uid, userAgent))
+	log.INFO("IssueToken: uid=%d, userAgent=%s", uid, userAgent)
 	token = utils.GenerateToken()
 	err = dao.CreateToken(&model.Token{
 		UserID:     uid,

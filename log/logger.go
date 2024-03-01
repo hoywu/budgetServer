@@ -1,26 +1,28 @@
 package log
 
 import (
+	"fmt"
 	"log"
 )
 
-func DEBUG(msg string) {
-	log.Println("[DEBUG] " + msg)
+func DEBUG(format string, v ...any) {
+	log.Printf("[DEBUG] "+format, v...)
 }
 
-func INFO(msg string) {
-	log.Println("[INFO] " + msg)
+func INFO(format string, v ...any) {
+	log.Printf("[INFO] "+format, v...)
 }
 
-func WARN(msg string) {
-	log.Println("[WARN] " + msg)
+func WARN(format string, v ...any) {
+	log.Printf("[WARN] "+format, v...)
 }
 
-func ERROR(msg string) {
-	log.Println("[ERROR] " + msg)
+func ERROR(format string, v ...any) {
+	log.Printf("[ERROR] "+format, v...)
 }
 
-func FATAL(msg string) {
+func FATAL(format string, v ...any) {
+	msg := fmt.Sprintf(format, v...)
 	log.Println("[FATAL] " + msg)
 	panic(msg)
 }

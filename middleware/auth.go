@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/hoywu/budgetServer/dto"
+	"github.com/hoywu/budgetServer/log"
 	"github.com/hoywu/budgetServer/service"
 )
 
@@ -15,6 +16,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		if !isValid {
 			c.JSON(http.StatusUnauthorized, dto.ErrorResp(401, "Unauthorized"))
 			c.Abort()
+			log.INFO("Unauthorized Access: " + c.ClientIP())
 			return
 		}
 		c.Set("uid", uid)

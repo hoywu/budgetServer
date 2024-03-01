@@ -7,6 +7,7 @@ import (
 	"github.com/hoywu/budgetServer/dto"
 	"github.com/hoywu/budgetServer/dto/request"
 	"github.com/hoywu/budgetServer/dto/response"
+	"github.com/hoywu/budgetServer/log"
 	"github.com/hoywu/budgetServer/model"
 	"github.com/hoywu/budgetServer/service"
 	"github.com/hoywu/budgetServer/utils"
@@ -21,12 +22,14 @@ func Login(c *gin.Context) {
 	user, err := service.Login(req.Username, utils.HashPassword(req.Password))
 	if err != nil {
 		c.JSON(http.StatusOK, dto.ErrorResp(1, "Login failed"))
+		log.ERROR("Login failed: [%s] %v", req.Username, err)
 		return
 	}
 
 	token, err := service.IssueToken(user.ID, c.Request.UserAgent())
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, dto.ErrorResp(500, err.Error()))
+		c.JSON(http.StatusOK, dto.ErrorResp(500, err.Error()))
+		log.ERROR("Issue token failed: [%s] %v", req.Username, err)
 		return
 	}
 
@@ -54,13 +57,15 @@ func Register(c *gin.Context) {
 			Nickname: req.Nickname,
 		})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, dto.ErrorResp(500, "Internal Server Error"))
+		c.JSON(http.StatusOK, dto.ErrorResp(500, "Internal Server Error"))
+		log.ERROR("Register failed: [%s] %v", req.Username, err)
 		return
 	}
 
 	token, err := service.IssueToken(user.ID, c.Request.UserAgent())
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, dto.ErrorResp(500, "Internal Server Error"))
+		c.JSON(http.StatusOK, dto.ErrorResp(500, "Internal Server Error"))
+		log.ERROR("Issue token failed: [%s] %v", req.Username, err)
 		return
 	}
 
@@ -73,7 +78,8 @@ func Register(c *gin.Context) {
 func GetUserInfo(c *gin.Context) {
 	user, err := service.GetUserInfo(c.GetUint("uid"))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, dto.ErrorResp(500, "Internal Server Error"))
+		c.JSON(http.StatusOK, dto.ErrorResp(500, "Internal Server Error"))
+		log.ERROR("Get user info failed: [UID %d] %v", c.GetUint("uid"), err)
 		return
 	}
 	c.JSON(http.StatusOK, dto.SuccessResp(&response.UserGetInfoResp{

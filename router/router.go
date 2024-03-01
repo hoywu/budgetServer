@@ -8,6 +8,7 @@ import (
 
 func InitRouter() *gin.Engine {
 	r := gin.Default()
+	addGlobalMiddlewares(r)
 
 	public := r.Group("/public")
 	addPublicRoutes(public)
@@ -17,6 +18,10 @@ func InitRouter() *gin.Engine {
 	addPrivateRoutes(private)
 
 	return r
+}
+
+func addGlobalMiddlewares(r *gin.Engine) {
+	r.Use(middleware.LoggerMiddleware())
 }
 
 func addPublicRoutes(r *gin.RouterGroup) {

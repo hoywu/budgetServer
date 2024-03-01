@@ -7,6 +7,7 @@ import (
 	"github.com/hoywu/budgetServer/dto"
 	"github.com/hoywu/budgetServer/dto/request"
 	"github.com/hoywu/budgetServer/dto/response"
+	"github.com/hoywu/budgetServer/log"
 	"github.com/hoywu/budgetServer/service"
 	"github.com/jinzhu/copier"
 )
@@ -29,7 +30,8 @@ func NewCategory(c *gin.Context) {
 
 	category, err := service.NewCategory(c.GetUint("uid"), &req)
 	if err != nil {
-		c.JSON(http.StatusOK, dto.ErrorResp(1, "Create category failed"))
+		c.JSON(http.StatusOK, dto.ErrorResp(500, "Create category failed"))
+		log.ERROR("Create category failed: [UID %d] %v", c.GetUint("uid"), err)
 		return
 	}
 
@@ -54,7 +56,8 @@ func RemoveCategory(c *gin.Context) {
 
 	err := service.RemoveCategory(c.GetUint("uid"), req.Name)
 	if err != nil {
-		c.JSON(http.StatusOK, dto.ErrorResp(1, "Remove category failed"))
+		c.JSON(http.StatusOK, dto.ErrorResp(500, "Remove category failed"))
+		log.ERROR("Remove category failed: [UID %d] [%v] %v", c.GetUint("uid"), req.Name, err)
 		return
 	}
 
@@ -64,7 +67,8 @@ func RemoveCategory(c *gin.Context) {
 func GetCategoryList(c *gin.Context) {
 	categoryList, err := service.GetCategoryList(c.GetUint("uid"))
 	if err != nil {
-		c.JSON(http.StatusOK, dto.ErrorResp(1, "Get category list failed"))
+		c.JSON(http.StatusOK, dto.ErrorResp(500, "Get category list failed"))
+		log.ERROR("Get category list failed: [UID %d] %v", c.GetUint("uid"), err)
 		return
 	}
 

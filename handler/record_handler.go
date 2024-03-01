@@ -8,6 +8,7 @@ import (
 	"github.com/hoywu/budgetServer/dto"
 	"github.com/hoywu/budgetServer/dto/request"
 	"github.com/hoywu/budgetServer/dto/response"
+	"github.com/hoywu/budgetServer/log"
 	"github.com/hoywu/budgetServer/service"
 	"github.com/hoywu/budgetServer/utils"
 )
@@ -29,7 +30,8 @@ func NewRecord(c *gin.Context) {
 
 	record, err := service.NewRecord(c.GetUint("uid"), &req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, dto.ErrorResp(1, "Create record failed"))
+		c.JSON(http.StatusOK, dto.ErrorResp(500, "Create record failed"))
+		log.ERROR("Create record failed: [UID %d] %v", c.GetUint("uid"), err)
 		return
 	}
 	c.JSON(http.StatusOK, dto.SuccessResp(&response.RecordCreateResp{
@@ -58,7 +60,8 @@ func UpdateRecord(c *gin.Context) {
 
 	err := service.UpdateRecord(c.GetUint("uid"), &req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, dto.ErrorResp(1, "Update record failed"))
+		c.JSON(http.StatusOK, dto.ErrorResp(500, "Update record failed"))
+		log.ERROR("Update record failed: [UID %d] [RID %d] %v", c.GetUint("uid"), req.ID, err)
 		return
 	}
 
@@ -73,7 +76,8 @@ func RemoveRecord(c *gin.Context) {
 
 	err := service.RemoveRecord(req.ID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, dto.ErrorResp(1, "Remove record failed"))
+		c.JSON(http.StatusOK, dto.ErrorResp(500, "Remove record failed"))
+		log.ERROR("Remove record failed: [UID %d] [RID %d] %v", c.GetUint("uid"), req.ID, err)
 		return
 	}
 	c.JSON(http.StatusOK, dto.SuccessResp())
@@ -84,7 +88,8 @@ func GetRecordList(c *gin.Context) {
 	limitInt, err := strconv.Atoi(limit)
 	records, err := service.GetRecordList(c.GetUint("uid"), limitInt)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, dto.ErrorResp(1, "Get record list failed"))
+		c.JSON(http.StatusOK, dto.ErrorResp(500, "Get record list failed"))
+		log.ERROR("Get record list failed: [UID %d] %v", c.GetUint("uid"), err)
 		return
 	}
 	c.JSON(http.StatusOK, dto.SuccessResp(&response.RecordGetListResp{
