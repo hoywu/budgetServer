@@ -3,10 +3,11 @@ package request
 import "github.com/shopspring/decimal"
 
 type BudgetCreateRequest struct {
-	Type     int `binding:"oneof=1 2"`
-	TypeName string
-	Amount   decimal.Decimal
-	Cycle    int `binding:"oneof=1 2 3 4"`
+	Type        int `binding:"oneof=1 2"`
+	TypeName    string
+	Amount      decimal.Decimal
+	Cycle       int `binding:"oneof=1 2 3 4"`
+	DisplayType int `binding:"oneof=1 2"`
 }
 
 type BudgetUpdateRequest struct {

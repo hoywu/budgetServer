@@ -17,11 +17,17 @@ const (
 	BudgetCycleYear  = 4
 )
 
+const (
+	BudgetDisplayTypeBackward = 1
+	BudgetDisplayTypeForward  = 2
+)
+
 type Budget struct {
 	gorm.Model
-	Type     int
-	TypeName string
-	Amount   decimal.Decimal `gorm:"type:decimal(11,2)"`
-	Cycle    int
-	UserID   uint
+	Type        int
+	TypeName    string
+	Amount      decimal.Decimal `gorm:"type:decimal(11,2)"`
+	Cycle       int
+	DisplayType int
+	UserID      uint
 }
