@@ -19,8 +19,23 @@ func NewCategory(uid uint, req *request.CategoryCreateRequest) (category *model.
 	return category, nil
 }
 
-func RemoveCategory(uid uint, name string) error {
-	return dao.DeleteCategoryByName(uid, name)
+func RemoveCategory(uid uint, name string) (err error) {
+	err = dao.DeleteCategoryByName(uid, name)
+	if err != nil {
+		return
+	}
+
+	budget, err := dao.GetBudgetsByUserID(uid)
+	if err != nil {
+		return
+	}
+
+	for _, v := range *budget {
+		if v.Type == model.BudgetTypeCategory && v.TypeName == name {
+			return dao.DeleteBudget(v.ID)
+		}
+	}
+	return nil
 }
 
 func IsCategoryExist(uid uint, name string) bool {
