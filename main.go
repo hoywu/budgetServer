@@ -13,7 +13,7 @@ func main() {
 	appConfig := loadAppConfig()
 	initDBConn(appConfig)
 	dbAutoMigrate()
-	startServer(":8080")
+	startServer(appConfig.Server)
 }
 
 func loadAppConfig() config.AppConfig {
@@ -21,7 +21,7 @@ func loadAppConfig() config.AppConfig {
 	if err != nil {
 		log.FATAL("Load app config error: " + err.Error())
 	}
-	return appConfig
+	return *appConfig
 }
 
 func initDBConn(appConfig config.AppConfig) {
@@ -41,7 +41,8 @@ func dbAutoMigrate() {
 	)
 }
 
-func startServer(addr string) {
+func startServer(serverConfig config.ServerConfig) {
+	addr := serverConfig.Host + ":" + serverConfig.Port
 	log.INFO("Server started at " + addr)
 	gin.SetMode(gin.ReleaseMode)
 	r := router.InitRouter()

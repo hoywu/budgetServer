@@ -8,8 +8,13 @@ import (
 )
 
 type AppConfig struct {
-	Port     string
+	Server   ServerConfig
 	Database DatabaseConfig
+}
+
+type ServerConfig struct {
+	Host string
+	Port string
 }
 
 type DatabaseConfig struct {
@@ -20,7 +25,7 @@ type DatabaseConfig struct {
 	DBName   string
 }
 
-func LoadConfig() (error, AppConfig) {
+func LoadConfig() (err error, appConfig *AppConfig) {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")
@@ -28,23 +33,21 @@ func LoadConfig() (error, AppConfig) {
 
 	log.DEBUG("Loading config file...")
 
-	if err := viper.ReadInConfig(); err != nil {
+	if err = viper.ReadInConfig(); err != nil {
 		log.ERROR(fmt.Sprintf("Error reading config file: %s\n", err))
-		return err, AppConfig{}
+		return
 	}
 
 	log.DEBUG("Config file path: " + viper.ConfigFileUsed())
 
-	var dbConfig DatabaseConfig
-	if err := viper.UnmarshalKey("database", &dbConfig); err != nil {
+	if err = viper.Unmarshal(&appConfig); err != nil {
 		log.ERROR(fmt.Sprintf("Error reading config file: %s\n", err))
-		return err, AppConfig{}
+		return
 	}
 
-	log.DEBUG("Database config: " + dbConfig.Host + ":" + dbConfig.Port + "/" + dbConfig.DBName)
-
-	return nil, AppConfig{
-		Port:     "8080",
-		Database: dbConfig,
-	}
+	log.DEBUG("Database config: " +
+		appConfig.Database.Host + ":" +
+		appConfig.Database.Port + "/" +
+		appConfig.Database.DBName)
+	return
 }
