@@ -52,6 +52,9 @@ func LoadConfig() (err error, appConfig *AppConfig) {
 		return
 	}
 
+	log.DEBUG("Policy config: %+v", appConfig.Policy)
+	config = *appConfig
+
 	log.DEBUG("Database config: " +
 		appConfig.Database.Host + ":" +
 		appConfig.Database.Port + "/" +
