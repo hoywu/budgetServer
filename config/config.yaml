@@ -1,3 +1,5 @@
+policy:
+  allowRegistration: false
 server:
   host: localhost
   port: 8989

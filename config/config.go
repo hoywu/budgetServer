@@ -8,8 +8,13 @@ import (
 )
 
 type AppConfig struct {
+	Policy   PolicyConfig
 	Server   ServerConfig
 	Database DatabaseConfig
+}
+
+type PolicyConfig struct {
+	AllowRegistration bool
 }
 
 type ServerConfig struct {
@@ -24,6 +29,8 @@ type DatabaseConfig struct {
 	Password string
 	DBName   string
 }
+
+var config AppConfig
 
 func LoadConfig() (err error, appConfig *AppConfig) {
 	viper.SetConfigName("config")
@@ -50,4 +57,8 @@ func LoadConfig() (err error, appConfig *AppConfig) {
 		appConfig.Database.Port + "/" +
 		appConfig.Database.DBName)
 	return
+}
+
+func GetPolicyConfig() PolicyConfig {
+	return config.Policy
 }

@@ -3,5 +3,6 @@ package consts
 import "errors"
 
 var (
-	ErrPassword = errors.New("Wrong password")
+	ErrNotAllowed = errors.New("Rejected by policy")
+	ErrPassword   = errors.New("Wrong password")
 )

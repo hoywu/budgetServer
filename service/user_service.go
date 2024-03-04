@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/hoywu/budgetServer/config"
 	"github.com/hoywu/budgetServer/consts"
 	"github.com/hoywu/budgetServer/dao"
 	"github.com/hoywu/budgetServer/model"
@@ -20,6 +21,10 @@ func Login(username, password string) (user *model.User, err error) {
 }
 
 func Register(username, password string, req *model.UserInfo) (user *model.User, err error) {
+	if !config.GetPolicyConfig().AllowRegistration {
+		err = consts.ErrNotAllowed
+		return nil, err
+	}
 	user = &model.User{
 		Username: username,
 		Password: password,
