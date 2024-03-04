@@ -1,4 +1,5 @@
 policy:
+  allowCORS: false
   allowRegistration: false
 server:
   host: localhost

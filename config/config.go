@@ -14,6 +14,7 @@ type AppConfig struct {
 }
 
 type PolicyConfig struct {
+	AllowCORS         bool
 	AllowRegistration bool
 }
 

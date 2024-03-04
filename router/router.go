@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/hoywu/budgetServer/config"
 	"github.com/hoywu/budgetServer/handler"
 	"github.com/hoywu/budgetServer/middleware"
 )
@@ -22,6 +23,9 @@ func InitRouter() *gin.Engine {
 
 func addGlobalMiddlewares(r *gin.Engine) {
 	r.Use(middleware.LoggerMiddleware())
+	if config.GetPolicyConfig().AllowCORS {
+		r.Use(middleware.CORSMiddleware())
+	}
 }
 
 func addPublicRoutes(r *gin.RouterGroup) {
