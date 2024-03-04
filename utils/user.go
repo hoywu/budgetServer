@@ -7,3 +7,7 @@ func ValidateUsername(username string) bool {
 func ValidatePassword(password string) bool {
 	return len(password) >= 8
 }
+
+func ValidateNickname(nickname string) bool {
+	return len(nickname) >= 1
+}
