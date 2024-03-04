@@ -45,6 +45,16 @@ func Register(c *gin.Context) {
 		return
 	}
 
+	if !utils.ValidateUsername(req.Username) {
+		c.JSON(http.StatusOK, dto.ErrorResp(1, "Invalid username"))
+		return
+	}
+
+	if !utils.ValidatePassword(req.Password) {
+		c.JSON(http.StatusOK, dto.ErrorResp(1, "Invalid password"))
+		return
+	}
+
 	if service.IsUserExist(req.Username) {
 		c.JSON(http.StatusOK, dto.ErrorResp(1, "User already exists"))
 		return
