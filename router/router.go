@@ -42,6 +42,7 @@ func addPrivateRoutes(r *gin.RouterGroup) {
 	{
 		ca.POST("/new", handler.NewCategory)
 		ca.POST("/remove", handler.RemoveCategory)
+		ca.POST("/update", handler.UpdateCategory)
 		ca.GET("/getList", handler.GetCategoryList)
 	}
 	re := r.Group("/record")

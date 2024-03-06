@@ -9,6 +9,10 @@ func CreateCategory(category *model.Category) error {
 	return db.DB.Create(category).Error
 }
 
+func UpdateCategory(category *model.Category) error {
+	return db.DB.Omit("created_at, updated_at").Save(category).Error
+}
+
 func DeleteCategory(id uint) error {
 	return db.DB.Where("id = ?", id).Delete(&model.Category{}).Error
 }

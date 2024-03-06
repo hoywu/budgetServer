@@ -43,6 +43,32 @@ func NewCategory(c *gin.Context) {
 	))
 }
 
+func UpdateCategory(c *gin.Context) {
+	var req request.CategoryUpdateRequest
+	if err := c.BindJSON(&req); err != nil {
+		return
+	}
+
+	if req.Name == "" {
+		c.JSON(http.StatusBadRequest, dto.ErrorResp(400, "Category name is required"))
+		return
+	}
+
+	if service.IsCategoryExist(c.GetUint("uid"), req.Name) {
+		c.JSON(http.StatusBadRequest, dto.ErrorResp(400, "Category already exists"))
+		return
+	}
+
+	err := service.UpdateCategory(c.GetUint("uid"), &req)
+	if err != nil {
+		c.JSON(http.StatusOK, dto.ErrorResp(500, "Update category failed"))
+		log.ERROR("Update category failed: [UID %d] %v", c.GetUint("uid"), err)
+		return
+	}
+
+	c.JSON(http.StatusOK, dto.SuccessResp())
+}
+
 func RemoveCategory(c *gin.Context) {
 	var req request.CategoryRemoveRequest
 	if err := c.BindJSON(&req); err != nil {

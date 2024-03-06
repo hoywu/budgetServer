@@ -4,6 +4,7 @@ import (
 	"github.com/hoywu/budgetServer/dao"
 	"github.com/hoywu/budgetServer/dto/request"
 	"github.com/hoywu/budgetServer/model"
+	"github.com/jinzhu/copier"
 )
 
 func NewCategory(uid uint, req *request.CategoryCreateRequest) (category *model.Category, err error) {
@@ -17,6 +18,14 @@ func NewCategory(uid uint, req *request.CategoryCreateRequest) (category *model.
 		return nil, err
 	}
 	return category, nil
+}
+
+func UpdateCategory(uid uint, req *request.CategoryUpdateRequest) error {
+	category := &model.Category{
+		UserID: uid,
+	}
+	copier.Copy(category, req)
+	return dao.UpdateCategory(category)
 }
 
 func RemoveCategory(uid uint, name string) (err error) {
