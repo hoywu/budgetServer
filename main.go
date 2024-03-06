@@ -32,7 +32,10 @@ func initDBConn(appConfig config.AppConfig) {
 }
 
 func dbAutoMigrate() {
-	db.DB.AutoMigrate(
+	db.DB.Set(
+		"gorm:table_options",
+		"ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin",
+	).AutoMigrate(
 		&model.User{},
 		&model.Token{},
 		&model.Category{},
