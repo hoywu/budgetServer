@@ -1,0 +1,13 @@
+# vim /etc/systemd/system/budget.service
+# systemctl daemon-reload
+[Unit]
+Description=Budget Server
+After=network.target
+
+[Service]
+WorkingDirectory=/opt/budget
+ExecStart=/opt/budget/budgetServer
+Restart=always
+
+[Install]
+WantedBy=default.target
