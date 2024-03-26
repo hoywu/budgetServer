@@ -2,7 +2,9 @@
 
 ## Build
 
-Use `--network=host` for docker build if you are behind a proxy.
+Binary: see [GitHub Actions](https://github.com/hoywu/budgetServer/actions)
+
+Docker: Use `--network=host` for docker build if you are behind a proxy.
 
 `docker build --network=host --tag budget .`
 
@@ -19,3 +21,5 @@ Or you can use docker compose to run both MariaDB and budget server. Copy `docke
 ## Web Frontend
 
 see https://github.com/hoywu/budget-web
+
+![desktop-shot](https://raw.githubusercontent.com/hoywu/budget-web/main/assets/desktop_shot.png)
